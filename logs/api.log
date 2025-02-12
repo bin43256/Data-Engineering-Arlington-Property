@@ -1,0 +1,30 @@
+
+2025-02-12 17:37:56,091 - api_log - DEBUG - Processing the sales history API...
+2025-02-12 17:37:56,093 - api_log - DEBUG - Existing files found in the bucket, start the incremental load
+2025-02-12 17:37:56,094 - api_log - DEBUG - Searching the last load date...: 2025-02-12
+2025-02-12 17:37:56,246 - api_log - DEBUG - Total number of records loaded:1
+2025-02-12 17:37:57,247 - api_log - DEBUG - preparing to load next API...
+2025-02-12 17:37:57,247 - api_log - DEBUG - processing the ImprovementDwelling API...
+2025-02-12 17:37:57,247 - api_log - DEBUG - Start the intial load
+2025-02-12 17:37:57,462 - api_log - DEBUG - reach the stop point, request stopped
+2025-02-12 17:37:57,462 - api_log - DEBUG - Total number of records loaded:1000
+2025-02-12 17:37:57,462 - api_log - DEBUG - API data loaded in: 0.0035799384117126466 seconds
+2025-02-12 17:37:58,463 - api_log - DEBUG - preparing to load next API...
+2025-02-12 17:37:58,463 - api_log - DEBUG - processing the ImprovementInterior API...
+2025-02-12 17:37:58,463 - api_log - DEBUG - Start the intial load
+2025-02-12 17:37:58,707 - api_log - DEBUG - reach the stop point, request stopped
+2025-02-12 17:37:58,707 - api_log - DEBUG - Total number of records loaded:1000
+2025-02-12 17:37:58,707 - api_log - DEBUG - API data loaded in: 0.00405417283376058 seconds
+2025-02-12 17:37:59,710 - api_log - DEBUG - preparing to load next API...
+2025-02-12 17:37:59,710 - api_log - DEBUG - processing the Outbuilding API...
+2025-02-12 17:37:59,710 - api_log - DEBUG - Start the intial load
+2025-02-12 17:37:59,864 - api_log - DEBUG - reach the stop point, request stopped
+2025-02-12 17:37:59,865 - api_log - DEBUG - Total number of records loaded:1000
+2025-02-12 17:37:59,865 - api_log - DEBUG - API data loaded in: 0.0025713364283243816 seconds
+2025-02-12 17:38:00,866 - api_log - DEBUG - preparing to load next API...
+2025-02-12 17:38:00,866 - api_log - DEBUG - processing the Property API...
+2025-02-12 17:38:00,866 - api_log - DEBUG - Start the intial load
+2025-02-12 17:38:01,465 - api_log - DEBUG - reach the stop point, request stopped
+2025-02-12 17:38:01,465 - api_log - DEBUG - Total number of records loaded:1000
+2025-02-12 17:38:01,465 - api_log - DEBUG - API data loaded in: 0.00997070074081421 seconds
+2025-02-12 17:38:01,465 - api_log - DEBUG - all APIs loaded successfully
