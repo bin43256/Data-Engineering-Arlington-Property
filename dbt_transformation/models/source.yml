@@ -1,0 +1,9 @@
+version: 2
+
+sources:
+  - name: postgres_db
+    database: postgres
+    schema: public
+    tables:
+      - name: sales
+      - name: dwellings_general

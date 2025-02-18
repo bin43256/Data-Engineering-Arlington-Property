@@ -9,9 +9,10 @@ from logger import setup_logger
 
 config = configparser.ConfigParser()
 config.read('src/config.cfg') 
+logger = setup_logger('api_log','logs/api.log')
 
-logger = setup_logger('api_log','api.log')
-
+# should I do change data capture (CDC) for these api, 
+# if so, what is the implemntation looks like? Snapshot Comparison(resource intensive but is the workaround)
 async def fetch_api_data(session, url): # helper function to start the async request
     try:
         async with session.get(url) as response:
@@ -19,20 +20,21 @@ async def fetch_api_data(session, url): # helper function to start the async req
                 return await response.json()
             else:
                 logger.error(f"HTTP Error {response.status}: {await response.text()}")
+                logger.debug('program sleep for 10s')
+                await asyncio.sleep(10)
                 return []
     except aiohttp.ClientError as e:
         logger.error(f"Error: {e}")
-        return []
             
-async def get_api_data(url: str, incre_load = False, skip = 0, top = 100 , stop = 1000):
+async def get_api_data(url: str, incre_load = False, skip = 0, top = 1000):
     ''' 
-    request api data from the Arlington County Data catalog, incremental load would only 
+    request api data from the Arlington County data catalog, incremental load would only 
     apply on the sales history API
     param url: API Endpoints
     param incre_load: indicates if we are parsing the sales history API
     param skip: pagination starting point
     param top: workload per request
-    return: json data
+    return: json response
     '''
     data = []
     start_time = time.time()
@@ -49,26 +51,22 @@ async def get_api_data(url: str, incre_load = False, skip = 0, top = 100 , stop 
                 logger.debug('No existing files found in the bucket, start the intial load')
                 tasks = []
                 while True:
-                    api = f"{url}?$skip={skip}&$top={top}"
+                    api = f"{url}?$skip={skip}&$top={top}&$filter=saleDate gt 1980-01-01"
                     tasks.append(fetch_api_data(session, api))
-                    skip +=100
+                    skip +=1000
                     if len(tasks) >=5:
                         results = await asyncio.gather(*tasks)
                         for chunk in results: # results should be the a list of 5 json data
                             data.extend(chunk)
-                            if len(chunk) < top:
+                            if len(data) % 10000 == 0:
+                                logger.debug(f'current records of data loaded:{len(data)}')
+                            if len(chunk) < top and len(chunk) != 0:
                                 end_time = time.time()
                                 logger.debug('reach the end of records, request stopped')
-                                logger.debug(f'API data loaded in: {(end_time - start_time)/60} seconds')
+                                logger.debug(f'Total number of records loaded:{len(data)}')
+                                logger.debug(f'API data loaded in: {(end_time - start_time)/60} minute(s)')
                                 return data
-                        if len(data) >= stop:
-                            logger.debug('reach the stop point, request stopped')
-                            end_time = time.time()
-                            logger.debug('API data loaded in: ', (end_time - start_time)/60, ' seconds')
-                            return data
                         tasks = []
-                        logger.debug(f'Total number of records loaded:{len(data)}')
-                        await asyncio.sleep(0.1)
             else: # if any existing files found in the bucket, use most recent folder date as refresh point
                 logger.debug('Existing files found in the bucket, start the incremental load')
                 folders = set()
@@ -86,50 +84,36 @@ async def get_api_data(url: str, incre_load = False, skip = 0, top = 100 , stop 
         else: # for other single-time API loads
             tasks = []
             logger.debug(f'processing the {url.split(sep='/')[-1]} API...')
-            logger.debug('Start the intial load')
             while True:
                 api = f"{url}?$skip={skip}&$top={top}"
                 tasks.append(fetch_api_data(session, api))
+                skip +=1000
                 if len(tasks) >=5:
                     results = await asyncio.gather(*tasks)
                     for chunk in results:
                         data.extend(chunk)
-                        if len(chunk) < top:
+                        if len(data) % 10000 == 0:
+                            logger.debug(f'current records of data loaded:{len(data)}')
+                        if len(chunk) < top and len(chunk) != 0:
                             logger.debug('reach the end of records, request stopped')
                             end_time = time.time()
-                            logger.debug(f'API data loaded in: {(end_time - start_time)/60} seconds')
+                            logger.debug(f'API data loaded in: {(end_time - start_time)/60} minutes')
                             logger.debug(f'Total number of records loaded:{len(data)}')
                             return data 
-                    if len(data) >= stop:
-                        end_time = time.time()
-                        logger.debug('reach the stop point, request stopped')
-                        logger.debug(f'Total number of records loaded:{len(data)}')
-                        logger.debug(f'API data loaded in: {(end_time - start_time)/60} seconds')
-                        return data
                     tasks = [] 
 
 async def collect_dataset() -> dict:
-    ''' 
-    return a dictionary of api names and their corresponding json data
-    '''
-    sales = await get_api_data(url=config.get('APIS', 'SALES_HISTORY'), incre_load=True)
-    time.sleep(1)
-    logger.debug('preparing to load next API...')
-    dwellings_general = await get_api_data(url=config.get('APIS', 'DWELLINGS_GENERAL'))
-    time.sleep(1)
-    logger.debug('preparing to load next API...')
-    dwellings_interior = await get_api_data(url=config.get('APIS', 'DWELLINGS_INTERIOR'))
-    time.sleep(1)
-    logger.debug('preparing to load next API...')
-    outbuildings = await get_api_data(url=config.get('APIS', 'OUTBUILDINGS'))
-    time.sleep(1)
-    logger.debug('preparing to load next API...')
-    property = await get_api_data(url=config.get('APIS', 'PROPERTY'))
-    logger.debug('all APIs loaded successfully')
-
-    dataset_collection = {'sales':sales,
-                          'dwellings_general':dwellings_general,
-                          'dwellings_interior':dwellings_interior,
-                          'outbuildings':outbuildings,
-                          'property':property}
+    #return a dictionary of APIs and their corresponding json response
+    start_time = time.time()
+    
+    dataset_collection = {'sales':await get_api_data(url=config.get('APIS', 'SALES_HISTORY'), incre_load=True),
+                          'dwellings_general':await get_api_data(url=config.get('APIS', 'DWELLINGS_GENERAL')),
+                          'dwellings_interior':await get_api_data(url=config.get('APIS', 'DWELLINGS_INTERIOR')),
+                          'property_class':await get_api_data(url=config.get('APIS', 'PROPERTY_CLASS')),
+                          'outbuildings':await get_api_data(url=config.get('APIS', 'OUTBUILDINGS')),
+                          'property':await get_api_data(url=config.get('APIS', 'PROPERTY'))
+                            }
+    end_time = time.time()
+    logger.debug(f'all APIs loaded successfully, total duration:{(end_time-start_time)/60} minute')
+    
     return dataset_collection
