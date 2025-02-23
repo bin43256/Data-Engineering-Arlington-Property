@@ -22,13 +22,14 @@ Arlington-Property-Sales/
 ├── postgres.py
 ├── s3_storage.py
 └── transformation.py
+```
 ## DAG
 ![alt text](assets/dag.png)
 
-##Star Schema
+## Star Schema
 ![alt text](assets/data_model.png)
 
-##ELT Explaination:
+## ELT Explaination:
 1. the data is ingested and stored separately in landing zone(archived and recovery area) and working zone(for transformation downstream)
 2. the data is transformed by remove duplicates,change data type, and construct surrogate key for each dimension table, once dimension table is built, the fact table would join by the surrogate key
 3. data is loaded into postgres database 
