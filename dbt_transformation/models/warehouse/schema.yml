@@ -1,0 +1,43 @@
+version: 2
+
+models:
+  - name: full_denormed_table
+    description: "A denormalized view of fact_sales by aggregating dimensional attributes where each row represents a single sale"
+    columns:
+      - name: saleshistorykey
+        description: "Primary key from fact_sales"
+        tests:
+          - not_null
+          - sale_date_not_future
+
+      - name: realestatepropertycode
+        description: "Property identifier"
+        tests:
+          - not_null
+      - name: saledate
+        description: "Date of sale"
+        tests:
+          - not_null
+      - name: salestypedsc
+        description: "Description of sale type"
+        tests:
+          - not_null
+
+      - name: propertyStreetNbrNameText
+        description: "Property address"
+        tests:
+          - not_null
+
+      - name: propertyclasstypedsc
+        description: "Property classification"
+        tests:
+          - not_null
+      - name: bedroomcnt
+        description: "Number of bedrooms"
+        tests:
+          - positive_value
+
+      - name: bathroomcnt
+        description: "Total number of bathrooms"
+        tests:
+          - positive_value

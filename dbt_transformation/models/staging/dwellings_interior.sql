@@ -1,1 +1,0 @@
-SELECT * FROM {{ source('postgres_db', 'dwellings_interior')}}

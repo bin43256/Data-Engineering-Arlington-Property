@@ -5,5 +5,143 @@ sources:
     database: postgres
     schema: public
     tables:
-      - name: sales
-      - name: dwellings_general
+      - name: dim_dwellings_general
+        columns:
+          - name: dwellingKey
+            tests:
+              - unique
+              - not_null
+          - name: realEstatePropertyCode
+            tests:
+              - not_null
+      - name: dim_dwellings_interior
+        columns:
+          - name: improvementInteriorKey
+            tests:
+              - unique
+              - not_null
+          - name: realEstatePropertyCode
+            tests:
+              - not_null
+          - name: dwellingKey
+            tests:
+              - not_null
+          - name: floorNbr
+            tests:
+              - not_null
+          - name: floorKey
+            tests:
+              - not_null
+
+      - name: dim_outbuildings
+        columns:
+          - name: outbuildingKey
+            tests:
+              - unique
+              - not_null
+          - name: outbuildingBaseKey
+            tests:
+              - not_null
+          - name: realEstatePropertyCode
+            tests:
+              - not_null
+          - name: outbuildingTypeDsc
+            tests:
+              - not_null
+
+      - name: dim_property
+        columns:
+          - name: propertyKey
+            tests:
+              - unique
+              - not_null
+          - name: realEstatePropertyCode
+            tests:
+              - not_null
+          - name: propertyStreetNbrNameText
+            tests:
+              - not_null
+          - name: propertyCityName
+            tests:
+              - not_null
+          - name: propertyZipCode
+            tests:
+              - not_null
+          - name: propertyClassTypeKey
+            tests:
+              - not_null
+              - relationships:
+                  to: source('postgres_db', 'dim_property_class')
+                  field: propertyClassTypeKey
+
+      - name: dim_property_class
+        columns:
+          - name: propertyClassTypeKey
+            tests:
+              - unique
+              - not_null
+          - name: propertyClassTypeCode
+            tests:
+              - not_null
+          - name: propertyClassTypeDsc
+            tests:
+              - not_null
+
+      - name: dim_sale_date
+        columns:
+          - name: saleDateKey
+            tests:
+              - unique
+              - not_null
+          - name: saleDate
+            tests:
+              - not_null
+          - name: year
+            tests:
+              - not_null
+          - name: Month
+            tests:
+              - not_null
+              - accepted_values:
+                  values: [1,2,3,4,5,6,7,8,9,10,11,12]
+          - name: day
+            tests:
+              - not_null
+              - accepted_values:
+                  values: [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31]
+          - name: weekday
+            tests:
+              - not_null
+              - accepted_values:
+                  values: [0,1,2,3,4,5,6]
+          - name: quarter
+            tests:
+              - not_null
+              - accepted_values:
+                  values: [1,2,3,4]
+
+      - name: dim_sales_type
+        columns:
+          - name: salesTypeKey
+            tests:
+              - unique
+              - not_null
+          - name: salesTypeCode
+            tests:
+              - not_null
+          - name: salesTypeDsc
+            tests:
+              - not_null
+      - name: fact_sales
+        columns:
+          - name: salesHistoryKey
+            tests:
+              - unique
+              - not_null
+          - name: saleDateKey
+            tests:
+              - not_null
+              - relationships:
+                  to: source('postgres_db', 'dim_sale_date')
+                  field: saleDateKey
+

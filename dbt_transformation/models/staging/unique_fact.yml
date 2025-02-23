@@ -1,0 +1,9 @@
+models:
+  - name: fact_sales
+    description: "Test the unique saleshistorykey"
+    columns:
+      - name: saleshistorykey
+        description: "Primary key from fact_sales"
+        tests:
+          - unique
+          - not_null

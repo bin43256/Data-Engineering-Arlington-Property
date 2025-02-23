@@ -1,178 +1,125 @@
-from pyspark.sql import SparkSession
-import pyspark.sql.functions as F
-from pyspark.sql.window import Window
-from pyspark.sql.types import StructType,StructField,IntegerType,DateType,StringType
+
+'''
+This module would use pandas dataframe to perform data cleaning and transformation,
+adn partition the data into star schema tables that would be ready to load for next step.
+
+During the transformation, the system would produce metadata that describes different 
+qualities of the data, such as data types, missing values, and duplicates.
+
+Data lineage and dependencies would also be captured and documented for future reference.
+
+'''
+
 import pandas as pd
+import json
+import io
 from logger import setup_logger
 
-# set up our logger and create a global spark session
-logger = setup_logger('transform_log','logs/transformation.log')
-def create_sparksession():
-    return SparkSession.builder \
-        .appName("arlingtonPropertySale") \
-        .master("local[*]") \
-        .enableHiveSupport() \
-        .config("spark.jars", "postgresql-42.7.5.jar") \
-        .getOrCreate()
-spark = create_sparksession()
-spark.conf.set("spark.sql.legacy.timeParserPolicy", "LEGACY")
-logger.debug('running a spark session, starting the transformation')
+# Set up our logger
+logger = setup_logger('transform_log', 'logs/transformation.log')
 
 def transform_sale_date():
-    sale_date = spark.read.csv('data/sale_date.csv',header = True)
-    sale_date = sale_date.withColumn("saleDate", F.to_date(F.col("saleDate"), "MM/dd/yyyy"))
-    sale_date = sale_date.withColumn("saleDateKey", F.col("saleDateKey").cast("int"))
-    sale_date = sale_date.withColumn("year", F.col("year").cast("int"))
-    sale_date = sale_date.withColumn("month", F.col("month").cast("int"))
-    sale_date = sale_date.withColumn("day", F.col("day").cast("int"))
-    sale_date = sale_date.withColumn("weekday", F.col("weekday").cast("int"))
-    sale_date = sale_date.withColumn("quarter", F.col("quarter").cast("int"))
+    sale_date = pd.read_csv('data/sale_date.csv', header=0)
+    sale_date['saleDateKey'] = sale_date['saleDateKey'].str.replace(',', '').astype(int)
+    sale_date['saleDate'] = pd.to_datetime(sale_date['saleDate'])
     logger.debug(f'SALE DATE columns with data types: {sale_date.dtypes}')
-    return sale_date
+    return sale_date, sale_date.to_dict('records')
 
-def transform_dwellings_general(data:dict):
-    df = pd.DataFrame(data=data)
-    logger.debug(f'The columns that are null will be dropped: {df.columns[df.isnull().all()].tolist()}')
-    df.dropna(axis=1,how='all',inplace=True)
-    drop_duplicate_df = df[~df['dwellingKey'].duplicated(keep=False)]  # 'keep=False' shows all occurrences of duplicates
+def transform_dwellings_general(data: io.BytesIO):
+    # Convert BytesIO to JSON
+    json_data = json.loads(data.read().decode('utf-8'))
+    df = pd.DataFrame(data=json_data)
+    df.dropna(axis=1, how='all', inplace=True)
+    drop_duplicate_df = df.drop_duplicates(subset=['dwellingKey'], keep=False)
+    
+    # Convert column data types to integer
+    drop_duplicate_df['realEstatePropertyCode'] = drop_duplicate_df['realEstatePropertyCode'].astype(int)
 
+    dwellings_general_df = drop_duplicate_df[[
+        "dwellingKey", "realEstatePropertyCode","coolingTypeDsc", "dwellingTypeDsc", "heatingTypeDsc", 
+        "dwellingYearBuiltDate", "storiesQuantityDsc", "fireplaceCnt"
+    ]]
 
-    df = spark.createDataFrame(drop_duplicate_df)
-    df = df.withColumn("realEstatePropertyCode", F.col("realEstatePropertyCode").cast("int"))
-    df = df.withColumn("basementFinishedRecRoomSquareFeetQty", F.col("basementFinishedRecRoomSquareFeetQty").cast("int"))
-
-    dwellings_general_df = df.select(
-    "dwellingKey",
-    "propertyKey",
-    "realEstatePropertyCode",
-    "basementFinishedRecRoomSquareFeetQty",
-    "basementRecRoomTypeDsc",
-    "coolingTypeDsc",
-    "dwellingTypeDsc",
-    "heatingTypeDsc",
-    "dwellingYearBuiltDate",
-    "storiesQuantityDsc",
-    "fireplaceCnt"
-    )
-
-    #duplicates = dwellings_general_df.groupby(*dwellings_general_df.columns).count().filter(F.col('count')>1)
     logger.debug(f'DWELLINGS GENERAL columns with data types: {dwellings_general_df.dtypes}')
-    return dwellings_general_df
+    # Convert DataFrame to JSON records
+    return dwellings_general_df.to_dict('records')
 
-def transform_dwellings_interior(data):
-    df = pd.DataFrame(data=data)
-    df_select = df[
-    ["improvementInteriorKey",
-    "realEstatePropertyCode",
-    "baseAreaSquareFeetQty",
-    "bedroomCnt",
-    "finishedAreaSquareFeetQty",
-    "twoFixtureBathroomCnt",
-    "threeFixtureBathroomCnt",
-    "fourFixtureBathroomCnt",
-    "fiveFixtureBathroomCnt",
-    "floorNbr",
-    "floorKey",]
-    ]
+def transform_dwellings_interior(data: io.BytesIO):
+    json_data = json.loads(data.read().decode('utf-8'))
+    df = pd.DataFrame(data=json_data)
+    df_select = df[[
+        "improvementInteriorKey", "realEstatePropertyCode", "baseAreaSquareFeetQty", "bedroomCnt",
+        "finishedAreaSquareFeetQty", "twoFixtureBathroomCnt", "threeFixtureBathroomCnt", "fourFixtureBathroomCnt",
+        "fiveFixtureBathroomCnt", "floorNbr", "floorKey"
+    ]]
     filled_df = df_select.fillna('Not Applicable')
 
-    dwellings_interior_df = spark.createDataFrame(filled_df)
-    dwellings_interior_df = dwellings_interior_df.dropDuplicates(["improvementInteriorKey"])
-    dwellings_interior_df = dwellings_interior_df.withColumn("realEstatePropertyCode", F.col("realEstatePropertyCode").cast("int"))
+    dwellings_interior_df = filled_df.drop_duplicates(subset=["improvementInteriorKey"])
+    dwellings_interior_df['realEstatePropertyCode'] = dwellings_interior_df['realEstatePropertyCode'].astype(int)
 
     logger.debug(f'DWELLINGS INTERIOR columns with data types: {dwellings_interior_df.dtypes}')
-    return dwellings_interior_df
+    return dwellings_interior_df.to_dict('records')
 
-def transform_property_class(data):
-    property_class_df = spark.createDataFrame(data)
-    window = Window.orderBy("propertyClassTypeCode")
-    property_class_df = property_class_df.withColumn( "propertyClassTypeKey", F.row_number().over(window))
+def transform_property_class(data: io.BytesIO):
+    json_data = json.loads(data.read().decode('utf-8'))
+    property_class_df = pd.DataFrame(data=json_data)
+    property_class_df['propertyClassTypeKey'] = property_class_df.reset_index().index + 1  # Simulating row number
     logger.debug(f'PROPERTY CLASS columns with data types: {property_class_df.dtypes}')
-    return property_class_df
 
-def transform_outbuildings(data):
-    df = pd.DataFrame(data=data)
-    logger.debug(f'The columns that are null will be dropped: {df.columns[df.isnull().all()].tolist()}')
-    df.dropna(axis=1,how='all',inplace=True)
+    return property_class_df, property_class_df.to_dict('records')
 
-    df = spark.createDataFrame(df)
-    df = df.withColumn("realEstatePropertyCode", F.col("realEstatePropertyCode").cast("int"))
+def transform_outbuildings(data: io.BytesIO):
+    json_data = json.loads(data.read().decode('utf-8'))
+    df = pd.DataFrame(data=json_data)
+    df.dropna(axis=1, how='all', inplace=True)
 
-    outbuiding_df = df.select(
-    "outbuildingKey",
-    "outbuildingBaseKey",
-    "realEstatePropertyCode",
-    "outbuildingTypeDsc",
-    "outbuildingSquareFeetQty"
-    )
-    logger.debug(f'OUTBUILDINGS columns with data types: {outbuiding_df.dtypes}')
-    return outbuiding_df
+    df['realEstatePropertyCode'] = df['realEstatePropertyCode'].astype(int)
 
-def transform_property(data):
-    df = pd.DataFrame(data=data)
-    df = df.drop_duplicates()
-    df = spark.createDataFrame(df)
-    df = df.withColumn("realEstatePropertyCode", F.col("realEstatePropertyCode").cast("int"))
+    outbuilding_df = df[[
+        "outbuildingKey", "outbuildingBaseKey", "realEstatePropertyCode", "outbuildingTypeDsc", "outbuildingSquareFeetQty"
+    ]]
+    logger.debug(f'OUTBUILDINGS columns with data types: {outbuilding_df.dtypes}')
+    return outbuilding_df.to_dict('records')
 
-    property_df = df.select(
-    "propertyKey",
-    "realEstatePropertyCode",
-    "legalDsc",
-    "lotSizeQty",
-    "propertyStreetName",
-    "propertyCityName",
-    "propertyZipCode"
-    )
+def transform_property(data: io.BytesIO, property_class: io.BytesIO):
+    json_data = json.loads(data.read().decode('utf-8'))
+    df = pd.DataFrame(data=json_data)
+    df.drop_duplicates(inplace=True)
+    df['realEstatePropertyCode'] = df['realEstatePropertyCode'].astype(int)
+
+    property_df = df[[
+        "propertyKey", "realEstatePropertyCode","propertyClassTypeCode",
+        "legalDsc", "lotSizeQty","propertyStreetNbrNameText", "propertyUnitNbr",
+        "propertyCityName", "propertyZipCode"
+    ]]
+    property_df = property_df.merge(property_class, on="propertyClassTypeCode", how="left")
+    property_df.drop(columns=["propertyClassTypeCode","propertyClassTypeDsc"], inplace=True)
     logger.debug(f'PROPERTY columns with data types: {property_df.dtypes}')
-    return property_df
+    return property_df.to_dict('records')
 
-def transform_sales(data:dict):
-    '''
-    process the sales api data
-    return:
-        sales as our fact table
-        sales_type as our dim table
-    '''
-    df = pd.DataFrame(data=data)
-    df.dropna(axis=1,how='all',inplace=True)
+def transform_sales(data: io.BytesIO, sale_date_df):
+    json_data = json.loads(data.read().decode('utf-8'))
+    df = pd.DataFrame(data=json_data)
+    df.dropna(axis=1, how='all', inplace=True)
+    df.drop_duplicates(inplace=True, subset=["salesHistoryKey"])
+    df["realEstatePropertyCode"] = df["realEstatePropertyCode"].astype(int)
+
+    # Convert 'saleDate' to datetime
+    df['saleDate'] = pd.to_datetime(df['saleDate'])
+    df.fillna('Not Applicable', inplace=True)
+
+    sales_type_df = df[["salesTypeCode", "salesTypeDsc"]].drop_duplicates()
+    sales_type_df['salesTypeKey'] = sales_type_df.reset_index().index + 1  # Simulating monotonically increasing ID
+
+    df = df.merge(sales_type_df[['salesTypeCode', 'salesTypeKey']], on="salesTypeCode", how="left")
+    df['saleDate'] =df['saleDate'].dt.tz_localize(None)
+    # Normalize both columns to remove the time part
+    df['saleDate'] = pd.to_datetime(df['saleDate']).dt.normalize()
+    sale_date_df['saleDate'] = pd.to_datetime(sale_date_df['saleDate']).dt.normalize()
+    df = df.merge(sale_date_df,on = 'saleDate', how = 'left')
+    sales_df = df[[
+        "salesHistoryKey", "realEstatePropertyCode", "propertyKey", "salesTypeKey", "saleDateKey", "saleAmt"
+    ]]
     
-    df = spark.createDataFrame(df)
-    df = df.withColumn("realEstatePropertyCode", F.col("realEstatePropertyCode").cast("int"))
-    df = df.withColumn('saleDate', F.col("saleDate").cast("date"))
-    df = df.fillna('Not Applicable')
-    sales_type_df = df.select(
-        "salesTypeCode",
-        "salesTypeDsc",
-    )
-    sales_type_df = sales_type_df.distinct().withColumn('salesTypeKey',F.monotonically_increasing_id())
-    df = df.join(sales_type_df, on = "salesTypeCode")
-
-    sales_date_df = transform_sale_date()
-    df = df.join(sales_date_df, on = 'saleDate')
-
-    sales_df = df.select(
-    "salesHistoryKey",
-    "realEstatePropertyCode",
-    "propertyKey",
-    "salesTypeKey",
-    "saleDateKey",
-    "saleAmt",
-    )
-    sales_df = sales_df.dropDuplicates()
-    logger.debug(f"number of rows remain:{sales_df.count()}")
-    logger.debug(f'SALES columns with data types: {sales_df.dtypes}')
-    return sales_df, sales_type_df
-
-def collect_transform_dataset(dataset_coll)-> dict:
-    sales, sales_type = transform_sales(dataset_coll['sales'])
-    dataset_coll = {
-                    'dim_sale_date':transform_sale_date(),
-                    'dim_sales_type':sales_type,
-                    'dim_dwellings_general':transform_dwellings_general(dataset_coll['dwellings_general']),
-                    'dim_dwellings_interior':transform_dwellings_interior(dataset_coll['dwellings_interior']),
-                    'dim_property_class': transform_property_class(dataset_coll['property_class']),
-                    'dim_outbuildings':transform_outbuildings(dataset_coll['outbuildings']),
-                    'dim_property':transform_property(dataset_coll['property']),
-                    'fact_sales':sales
-                    }
-    return dataset_coll
+    print(f'\nSALES columns with data types: {sales_df.dtypes}')
+    return sales_df.to_dict('records'), sales_type_df.to_dict('records')

@@ -1,31 +1,24 @@
-## Still working on completing this project- the full readme would be available once the project is completed
-## Project Navigation
+# Project Title: Arlington Property Sales Data Engineering
+## Overview
+This project focuses on the data engineering aspects of Arlington County's property sales data. The goal is to build a robust data pipeline that ingests, processes, and transforms property sales data for analysis and reporting.
+## Architecture
+![alt text](assets/architecture.png)
+## Project Structure
 ```text
-├── Airflow
-│   └── dags.py
-├── assets
-├── dbt_transformation
-│   ├── README.md
-│   ├── analyses
-│   ├── dbt_project.yml
-│   ├── macros
-│   ├── models
-│   │   ├── mart
-│   │   └── staging
-│   ├── seeds
-│   ├── snapshots
-│   └── tests
-├── logs
-│   ├── api.log
-│   ├── dbt.log
-│   └── transformation.log
-├── postgresql-42.7.5.jar
-└── src
-    ├── api_ingestion.py
-    ├── config.cfg
-    ├── logger.py
-    ├── main.py
-    ├── postgres.py
-    ├── s3_storage.py
-    └── transformation.py
-
+Arlington-Property-Sales/
+├── airflow/
+│ ├── dags/
+│ │ ├── dag.py # Main DAG file for orchestration
+│ └── airflow.cfg # Airflow configuration file
+├── data/
+│ └── full_denormed_table.csv #final output
+├── dbt_transformation/ # DBT models and tests
+├── elt_logs/ # metadata produce during etl
+│ ├── api.log
+│ └── transformation.log
+└── src/
+├── api_ingestion.py 
+├── main.py
+├── postgres.py
+├── s3_storage.py
+└── transformation.py

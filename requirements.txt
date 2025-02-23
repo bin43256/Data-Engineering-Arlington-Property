@@ -1,0 +1,22 @@
+# Core dependencies
+apache-airflow>=2.7.0
+psycopg2-binary>=2.9.0
+pandas>=2.0.0
+boto3>=1.28.0
+
+# DBT dependencies
+dbt-core>=1.7.0
+dbt-postgres>=1.7.0
+
+# API and Data Processing
+aiohttp>=3.9.0
+requests>=2.31.0
+
+# Configuration and Logging
+python-dotenv>=1.0.0
+configparser>=5.3.0
+
+# Testing and Development
+pytest>=7.4.0
+black>=23.0.0
+flake8>=6.1.0

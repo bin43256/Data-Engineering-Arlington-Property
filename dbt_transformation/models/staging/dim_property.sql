@@ -1,0 +1,1 @@
+SELECT * FROM {{ source('postgres_db', 'dim_property')}}

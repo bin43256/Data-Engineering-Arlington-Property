@@ -1,6 +1,4 @@
 import psycopg2
-import logging
-from transformation import logger
 
 default_db = {
     'host': 'localhost',
@@ -10,14 +8,9 @@ default_db = {
     'password': 'postgres'
 }
 
+# set up table attributes and schemas
 def create_tables() -> None:
-    with psycopg2.connect(
-        host=default_db['host'],
-        port=default_db['port'],
-        dbname=default_db['dbname'],
-        user=default_db['user'],
-        password=default_db['password']
-    ) as conn:
+    with psycopg2.connect(**default_db) as conn:
         print('postgres database connected sucessfully')
         with conn.cursor() as curs:
             curs.execute(
@@ -42,10 +35,7 @@ def create_tables() -> None:
                 CREATE TABLE IF NOT EXISTS dim_dwellings_general
                 (
                         dwellingKey INT PRIMARY KEY,
-                        propertyKey INT,
                         realEstatePropertyCode INT,
-                        basementFinishedRecRoomSquareFeetQty INT,
-                        basementRecRoomTypeDsc VARCHAR(255),
                         coolingTypeDsc VARCHAR(255),
                         dwellingTypeDsc VARCHAR(255),
                         heatingTypeDsc VARCHAR(255),
@@ -91,10 +81,11 @@ def create_tables() -> None:
                         realEstatePropertyCode INT,
                         legalDsc VARCHAR(255),
                         lotSizeQty INT,
-                        propertyStreetName VARCHAR(255),
-                        propertStreetTypeCode VARCHAR(255),
+                        propertyStreetNbrNameText VARCHAR(255),
+                        propertyUnitNbr VARCHAR(255),
                         propertyCityName VARCHAR(255),
-                        propertyZipCode VARCHAR(255)
+                        propertyZipCode VARCHAR(255),
+                        propertyClassTypeKey INT
                     );
                 CREATE TABLE IF NOT EXISTS fact_sales
                     (   
@@ -109,39 +100,51 @@ def create_tables() -> None:
                     );
                 """
             )
+        print("all the table have been created")
 
-def insert_data(table_name: str, spark_df) -> None:
-    #inserts a spark dataframe into the target database table
-    print(f'inserting into table {table_name}')
-    jdbc = f"jdbc:postgresql://{default_db['host']}:{default_db['port']}/{default_db['dbname']}"
-    properties = {
-    "user": default_db['user'],
-    "password": default_db['password'],
-    "driver": "org.postgresql.Driver"
-    }
+def insert_data(table_name: str, json_data: list) -> None:
+    """
+    Inserts JSON data into the target PostgreSQL table.
+    """
+    print(f'Inserting into table {table_name}')
     try:
-        spark_df.write \
-        .jdbc(url=jdbc, table=table_name, mode="append", properties=properties)
+        with psycopg2.connect(**default_db) as conn:
+            with conn.cursor() as cur:
+                columns = json_data[0].keys()
+                values_template = ','.join(['%s'] * len(columns))
+                insert_query = f"INSERT INTO {table_name} ({','.join(columns)}) VALUES ({values_template})"
+                values = [[record[column] for column in columns] for record in json_data]                
+                batch_size = 1000
+                for i in range(0, len(values), batch_size):
+                    batch = values[i:i + batch_size]
+                    cur.executemany(insert_query, batch)
+                    print(f"Inserted batch of {len(batch)} records")
+                print(f'Data inserted into {table_name} successfully!')       
     except Exception as e:
-        print(f'A error has occured, check for connection, schema match, or duplication: {e}')
+        print(f'An error occurred while inserting data: {str(e)}')
+        raise
 
-def drop_tables():
+def truncate_tables():
     try:
-        with psycopg2.connect(
-            host=default_db['host'],
-            port=default_db['port'],
-            dbname=default_db['dbname'],
-            user=default_db['user'],
-            password=default_db['password']
-        ) as conn:
+        with psycopg2.connect(**default_db) as conn:
             with conn.cursor() as curs:
                 curs.execute("SELECT table_name FROM information_schema.tables WHERE table_schema = 'public';")
                 tables = curs.fetchall()
-                print(f'all the tables: {tables}')
                 for table in tables:
                     table_name = table[0]
-                    curs.execute(f"DROP TABLE IF EXISTS {table_name} CASCADE;")
-                    print(f'table {table_name} has been dropped')
+                    curs.execute(f"TRUNCATE TABLE {table_name} CASCADE;")
+                    print(f'table {table_name} has been truncated')
     except Exception as e:
         print(f"Error: {e}")
-    print('all the tables have been dropped, continue...')
+    print('all the tables have been truncated, continue...')
+
+def export_data_to_csv(table_name: str, file_name: str) -> None:
+    try:
+        with psycopg2.connect(**default_db) as conn:
+            with conn.cursor() as cur:
+                with open(file_name, 'w') as f:
+                    cur.copy_expert(f"COPY (SELECT * FROM {table_name}) TO STDOUT WITH CSV HEADER", f)
+                print(f"Data exported to {file_name} successfully!")
+    except Exception as e:
+        print(f"Error exporting data: {e}")
+        raise
