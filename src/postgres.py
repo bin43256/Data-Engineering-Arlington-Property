@@ -148,3 +148,4 @@ def export_data_to_csv(table_name: str, file_name: str) -> None:
     except Exception as e:
         print(f"Error exporting data: {e}")
         raise
+
