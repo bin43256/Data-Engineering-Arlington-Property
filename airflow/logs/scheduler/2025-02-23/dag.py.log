@@ -2190,3 +2190,101 @@
 [2025-02-23T15:15:05.528-0500] {logging_mixin.py:190} INFO - [2025-02-23T15:15:05.528-0500] {dag.py:3239} INFO - Sync 1 DAGs
 [2025-02-23T15:15:05.544-0500] {logging_mixin.py:190} INFO - [2025-02-23T15:15:05.544-0500] {dag.py:4180} INFO - Setting next_dagrun for Arlington_Property_Sales_Pipeline to 2025-02-23 00:00:00+00:00, run_after=2025-03-02 00:00:00+00:00
 [2025-02-23T15:15:05.559-0500] {processor.py:208} INFO - Processing /home/binchen4568/Arlington-Property-Sales/airflow/dags/dag.py took 0.068 seconds
+[2025-02-23T15:15:36.256-0500] {processor.py:186} INFO - Started process (PID=65948) to work on /home/binchen4568/Arlington-Property-Sales/airflow/dags/dag.py
+[2025-02-23T15:15:36.257-0500] {processor.py:914} INFO - Processing file /home/binchen4568/Arlington-Property-Sales/airflow/dags/dag.py for tasks to queue
+[2025-02-23T15:15:36.259-0500] {logging_mixin.py:190} INFO - [2025-02-23T15:15:36.259-0500] {dagbag.py:588} INFO - Filling up the DagBag from /home/binchen4568/Arlington-Property-Sales/airflow/dags/dag.py
+[2025-02-23T15:15:36.272-0500] {processor.py:925} INFO - DAG(s) 'Arlington_Property_Sales_Pipeline' retrieved from /home/binchen4568/Arlington-Property-Sales/airflow/dags/dag.py
+[2025-02-23T15:15:36.304-0500] {logging_mixin.py:190} INFO - [2025-02-23T15:15:36.304-0500] {dag.py:3239} INFO - Sync 1 DAGs
+[2025-02-23T15:15:36.327-0500] {logging_mixin.py:190} INFO - [2025-02-23T15:15:36.327-0500] {dag.py:4180} INFO - Setting next_dagrun for Arlington_Property_Sales_Pipeline to 2025-02-23 00:00:00+00:00, run_after=2025-03-02 00:00:00+00:00
+[2025-02-23T15:15:36.346-0500] {processor.py:208} INFO - Processing /home/binchen4568/Arlington-Property-Sales/airflow/dags/dag.py took 0.096 seconds
+[2025-02-23T15:16:07.150-0500] {processor.py:186} INFO - Started process (PID=66102) to work on /home/binchen4568/Arlington-Property-Sales/airflow/dags/dag.py
+[2025-02-23T15:16:07.151-0500] {processor.py:914} INFO - Processing file /home/binchen4568/Arlington-Property-Sales/airflow/dags/dag.py for tasks to queue
+[2025-02-23T15:16:07.153-0500] {logging_mixin.py:190} INFO - [2025-02-23T15:16:07.153-0500] {dagbag.py:588} INFO - Filling up the DagBag from /home/binchen4568/Arlington-Property-Sales/airflow/dags/dag.py
+[2025-02-23T15:16:07.169-0500] {processor.py:925} INFO - DAG(s) 'Arlington_Property_Sales_Pipeline' retrieved from /home/binchen4568/Arlington-Property-Sales/airflow/dags/dag.py
+[2025-02-23T15:16:07.203-0500] {logging_mixin.py:190} INFO - [2025-02-23T15:16:07.203-0500] {dag.py:3239} INFO - Sync 1 DAGs
+[2025-02-23T15:16:07.224-0500] {logging_mixin.py:190} INFO - [2025-02-23T15:16:07.224-0500] {dag.py:4180} INFO - Setting next_dagrun for Arlington_Property_Sales_Pipeline to 2025-02-23 00:00:00+00:00, run_after=2025-03-02 00:00:00+00:00
+[2025-02-23T15:16:07.255-0500] {processor.py:208} INFO - Processing /home/binchen4568/Arlington-Property-Sales/airflow/dags/dag.py took 0.110 seconds
+[2025-02-23T15:16:37.895-0500] {processor.py:186} INFO - Started process (PID=66129) to work on /home/binchen4568/Arlington-Property-Sales/airflow/dags/dag.py
+[2025-02-23T15:16:37.896-0500] {processor.py:914} INFO - Processing file /home/binchen4568/Arlington-Property-Sales/airflow/dags/dag.py for tasks to queue
+[2025-02-23T15:16:37.898-0500] {logging_mixin.py:190} INFO - [2025-02-23T15:16:37.898-0500] {dagbag.py:588} INFO - Filling up the DagBag from /home/binchen4568/Arlington-Property-Sales/airflow/dags/dag.py
+[2025-02-23T15:16:37.910-0500] {processor.py:925} INFO - DAG(s) 'Arlington_Property_Sales_Pipeline' retrieved from /home/binchen4568/Arlington-Property-Sales/airflow/dags/dag.py
+[2025-02-23T15:16:37.936-0500] {logging_mixin.py:190} INFO - [2025-02-23T15:16:37.936-0500] {dag.py:3239} INFO - Sync 1 DAGs
+[2025-02-23T15:16:37.965-0500] {logging_mixin.py:190} INFO - [2025-02-23T15:16:37.965-0500] {dag.py:4180} INFO - Setting next_dagrun for Arlington_Property_Sales_Pipeline to 2025-02-23 00:00:00+00:00, run_after=2025-03-02 00:00:00+00:00
+[2025-02-23T15:16:37.988-0500] {processor.py:208} INFO - Processing /home/binchen4568/Arlington-Property-Sales/airflow/dags/dag.py took 0.100 seconds
+[2025-02-23T15:17:08.443-0500] {processor.py:186} INFO - Started process (PID=66147) to work on /home/binchen4568/Arlington-Property-Sales/airflow/dags/dag.py
+[2025-02-23T15:17:08.445-0500] {processor.py:914} INFO - Processing file /home/binchen4568/Arlington-Property-Sales/airflow/dags/dag.py for tasks to queue
+[2025-02-23T15:17:08.452-0500] {logging_mixin.py:190} INFO - [2025-02-23T15:17:08.450-0500] {dagbag.py:588} INFO - Filling up the DagBag from /home/binchen4568/Arlington-Property-Sales/airflow/dags/dag.py
+[2025-02-23T15:17:08.470-0500] {processor.py:925} INFO - DAG(s) 'Arlington_Property_Sales_Pipeline' retrieved from /home/binchen4568/Arlington-Property-Sales/airflow/dags/dag.py
+[2025-02-23T15:17:08.497-0500] {logging_mixin.py:190} INFO - [2025-02-23T15:17:08.497-0500] {dag.py:3239} INFO - Sync 1 DAGs
+[2025-02-23T15:17:08.515-0500] {logging_mixin.py:190} INFO - [2025-02-23T15:17:08.515-0500] {dag.py:4180} INFO - Setting next_dagrun for Arlington_Property_Sales_Pipeline to 2025-02-23 00:00:00+00:00, run_after=2025-03-02 00:00:00+00:00
+[2025-02-23T15:17:08.531-0500] {processor.py:208} INFO - Processing /home/binchen4568/Arlington-Property-Sales/airflow/dags/dag.py took 0.098 seconds
+[2025-02-23T15:17:39.213-0500] {processor.py:186} INFO - Started process (PID=66164) to work on /home/binchen4568/Arlington-Property-Sales/airflow/dags/dag.py
+[2025-02-23T15:17:39.216-0500] {processor.py:914} INFO - Processing file /home/binchen4568/Arlington-Property-Sales/airflow/dags/dag.py for tasks to queue
+[2025-02-23T15:17:39.237-0500] {logging_mixin.py:190} INFO - [2025-02-23T15:17:39.237-0500] {dagbag.py:588} INFO - Filling up the DagBag from /home/binchen4568/Arlington-Property-Sales/airflow/dags/dag.py
+[2025-02-23T15:17:39.277-0500] {processor.py:925} INFO - DAG(s) 'Arlington_Property_Sales_Pipeline' retrieved from /home/binchen4568/Arlington-Property-Sales/airflow/dags/dag.py
+[2025-02-23T15:17:39.329-0500] {logging_mixin.py:190} INFO - [2025-02-23T15:17:39.329-0500] {dag.py:3239} INFO - Sync 1 DAGs
+[2025-02-23T15:17:39.357-0500] {logging_mixin.py:190} INFO - [2025-02-23T15:17:39.357-0500] {dag.py:4180} INFO - Setting next_dagrun for Arlington_Property_Sales_Pipeline to 2025-02-23 00:00:00+00:00, run_after=2025-03-02 00:00:00+00:00
+[2025-02-23T15:17:39.374-0500] {processor.py:208} INFO - Processing /home/binchen4568/Arlington-Property-Sales/airflow/dags/dag.py took 0.189 seconds
+[2025-02-23T15:18:10.021-0500] {processor.py:186} INFO - Started process (PID=66187) to work on /home/binchen4568/Arlington-Property-Sales/airflow/dags/dag.py
+[2025-02-23T15:18:10.022-0500] {processor.py:914} INFO - Processing file /home/binchen4568/Arlington-Property-Sales/airflow/dags/dag.py for tasks to queue
+[2025-02-23T15:18:10.024-0500] {logging_mixin.py:190} INFO - [2025-02-23T15:18:10.024-0500] {dagbag.py:588} INFO - Filling up the DagBag from /home/binchen4568/Arlington-Property-Sales/airflow/dags/dag.py
+[2025-02-23T15:18:10.036-0500] {processor.py:925} INFO - DAG(s) 'Arlington_Property_Sales_Pipeline' retrieved from /home/binchen4568/Arlington-Property-Sales/airflow/dags/dag.py
+[2025-02-23T15:18:10.068-0500] {logging_mixin.py:190} INFO - [2025-02-23T15:18:10.068-0500] {dag.py:3239} INFO - Sync 1 DAGs
+[2025-02-23T15:18:10.088-0500] {logging_mixin.py:190} INFO - [2025-02-23T15:18:10.088-0500] {dag.py:4180} INFO - Setting next_dagrun for Arlington_Property_Sales_Pipeline to 2025-02-23 00:00:00+00:00, run_after=2025-03-02 00:00:00+00:00
+[2025-02-23T15:18:10.107-0500] {processor.py:208} INFO - Processing /home/binchen4568/Arlington-Property-Sales/airflow/dags/dag.py took 0.128 seconds
+[2025-02-23T15:18:40.850-0500] {processor.py:186} INFO - Started process (PID=66229) to work on /home/binchen4568/Arlington-Property-Sales/airflow/dags/dag.py
+[2025-02-23T15:18:40.850-0500] {processor.py:914} INFO - Processing file /home/binchen4568/Arlington-Property-Sales/airflow/dags/dag.py for tasks to queue
+[2025-02-23T15:18:40.852-0500] {logging_mixin.py:190} INFO - [2025-02-23T15:18:40.852-0500] {dagbag.py:588} INFO - Filling up the DagBag from /home/binchen4568/Arlington-Property-Sales/airflow/dags/dag.py
+[2025-02-23T15:18:40.862-0500] {processor.py:925} INFO - DAG(s) 'Arlington_Property_Sales_Pipeline' retrieved from /home/binchen4568/Arlington-Property-Sales/airflow/dags/dag.py
+[2025-02-23T15:18:40.897-0500] {logging_mixin.py:190} INFO - [2025-02-23T15:18:40.897-0500] {dag.py:3239} INFO - Sync 1 DAGs
+[2025-02-23T15:18:40.920-0500] {logging_mixin.py:190} INFO - [2025-02-23T15:18:40.920-0500] {dag.py:4180} INFO - Setting next_dagrun for Arlington_Property_Sales_Pipeline to 2025-02-23 00:00:00+00:00, run_after=2025-03-02 00:00:00+00:00
+[2025-02-23T15:18:40.941-0500] {processor.py:208} INFO - Processing /home/binchen4568/Arlington-Property-Sales/airflow/dags/dag.py took 0.096 seconds
+[2025-02-23T15:19:11.581-0500] {processor.py:186} INFO - Started process (PID=66244) to work on /home/binchen4568/Arlington-Property-Sales/airflow/dags/dag.py
+[2025-02-23T15:19:11.584-0500] {processor.py:914} INFO - Processing file /home/binchen4568/Arlington-Property-Sales/airflow/dags/dag.py for tasks to queue
+[2025-02-23T15:19:11.586-0500] {logging_mixin.py:190} INFO - [2025-02-23T15:19:11.586-0500] {dagbag.py:588} INFO - Filling up the DagBag from /home/binchen4568/Arlington-Property-Sales/airflow/dags/dag.py
+[2025-02-23T15:19:11.602-0500] {processor.py:925} INFO - DAG(s) 'Arlington_Property_Sales_Pipeline' retrieved from /home/binchen4568/Arlington-Property-Sales/airflow/dags/dag.py
+[2025-02-23T15:19:11.642-0500] {logging_mixin.py:190} INFO - [2025-02-23T15:19:11.642-0500] {dag.py:3239} INFO - Sync 1 DAGs
+[2025-02-23T15:19:11.664-0500] {logging_mixin.py:190} INFO - [2025-02-23T15:19:11.664-0500] {dag.py:4180} INFO - Setting next_dagrun for Arlington_Property_Sales_Pipeline to 2025-02-23 00:00:00+00:00, run_after=2025-03-02 00:00:00+00:00
+[2025-02-23T15:19:11.687-0500] {processor.py:208} INFO - Processing /home/binchen4568/Arlington-Property-Sales/airflow/dags/dag.py took 0.118 seconds
+[2025-02-23T15:19:42.242-0500] {processor.py:186} INFO - Started process (PID=66253) to work on /home/binchen4568/Arlington-Property-Sales/airflow/dags/dag.py
+[2025-02-23T15:19:42.243-0500] {processor.py:914} INFO - Processing file /home/binchen4568/Arlington-Property-Sales/airflow/dags/dag.py for tasks to queue
+[2025-02-23T15:19:42.246-0500] {logging_mixin.py:190} INFO - [2025-02-23T15:19:42.245-0500] {dagbag.py:588} INFO - Filling up the DagBag from /home/binchen4568/Arlington-Property-Sales/airflow/dags/dag.py
+[2025-02-23T15:19:42.257-0500] {processor.py:925} INFO - DAG(s) 'Arlington_Property_Sales_Pipeline' retrieved from /home/binchen4568/Arlington-Property-Sales/airflow/dags/dag.py
+[2025-02-23T15:19:42.284-0500] {logging_mixin.py:190} INFO - [2025-02-23T15:19:42.284-0500] {dag.py:3239} INFO - Sync 1 DAGs
+[2025-02-23T15:19:42.302-0500] {logging_mixin.py:190} INFO - [2025-02-23T15:19:42.302-0500] {dag.py:4180} INFO - Setting next_dagrun for Arlington_Property_Sales_Pipeline to 2025-02-23 00:00:00+00:00, run_after=2025-03-02 00:00:00+00:00
+[2025-02-23T15:19:42.319-0500] {processor.py:208} INFO - Processing /home/binchen4568/Arlington-Property-Sales/airflow/dags/dag.py took 0.081 seconds
+[2025-02-23T15:20:12.901-0500] {processor.py:186} INFO - Started process (PID=66268) to work on /home/binchen4568/Arlington-Property-Sales/airflow/dags/dag.py
+[2025-02-23T15:20:12.902-0500] {processor.py:914} INFO - Processing file /home/binchen4568/Arlington-Property-Sales/airflow/dags/dag.py for tasks to queue
+[2025-02-23T15:20:12.903-0500] {logging_mixin.py:190} INFO - [2025-02-23T15:20:12.903-0500] {dagbag.py:588} INFO - Filling up the DagBag from /home/binchen4568/Arlington-Property-Sales/airflow/dags/dag.py
+[2025-02-23T15:20:12.914-0500] {processor.py:925} INFO - DAG(s) 'Arlington_Property_Sales_Pipeline' retrieved from /home/binchen4568/Arlington-Property-Sales/airflow/dags/dag.py
+[2025-02-23T15:20:12.940-0500] {logging_mixin.py:190} INFO - [2025-02-23T15:20:12.940-0500] {dag.py:3239} INFO - Sync 1 DAGs
+[2025-02-23T15:20:12.962-0500] {logging_mixin.py:190} INFO - [2025-02-23T15:20:12.962-0500] {dag.py:4180} INFO - Setting next_dagrun for Arlington_Property_Sales_Pipeline to 2025-02-23 00:00:00+00:00, run_after=2025-03-02 00:00:00+00:00
+[2025-02-23T15:20:12.980-0500] {processor.py:208} INFO - Processing /home/binchen4568/Arlington-Property-Sales/airflow/dags/dag.py took 0.086 seconds
+[2025-02-23T15:20:43.659-0500] {processor.py:186} INFO - Started process (PID=66284) to work on /home/binchen4568/Arlington-Property-Sales/airflow/dags/dag.py
+[2025-02-23T15:20:43.660-0500] {processor.py:914} INFO - Processing file /home/binchen4568/Arlington-Property-Sales/airflow/dags/dag.py for tasks to queue
+[2025-02-23T15:20:43.661-0500] {logging_mixin.py:190} INFO - [2025-02-23T15:20:43.661-0500] {dagbag.py:588} INFO - Filling up the DagBag from /home/binchen4568/Arlington-Property-Sales/airflow/dags/dag.py
+[2025-02-23T15:20:43.673-0500] {processor.py:925} INFO - DAG(s) 'Arlington_Property_Sales_Pipeline' retrieved from /home/binchen4568/Arlington-Property-Sales/airflow/dags/dag.py
+[2025-02-23T15:20:43.705-0500] {logging_mixin.py:190} INFO - [2025-02-23T15:20:43.705-0500] {dag.py:3239} INFO - Sync 1 DAGs
+[2025-02-23T15:20:43.726-0500] {logging_mixin.py:190} INFO - [2025-02-23T15:20:43.726-0500] {dag.py:4180} INFO - Setting next_dagrun for Arlington_Property_Sales_Pipeline to 2025-02-23 00:00:00+00:00, run_after=2025-03-02 00:00:00+00:00
+[2025-02-23T15:20:43.744-0500] {processor.py:208} INFO - Processing /home/binchen4568/Arlington-Property-Sales/airflow/dags/dag.py took 0.089 seconds
+[2025-02-23T15:21:14.575-0500] {processor.py:186} INFO - Started process (PID=66305) to work on /home/binchen4568/Arlington-Property-Sales/airflow/dags/dag.py
+[2025-02-23T15:21:14.576-0500] {processor.py:914} INFO - Processing file /home/binchen4568/Arlington-Property-Sales/airflow/dags/dag.py for tasks to queue
+[2025-02-23T15:21:14.578-0500] {logging_mixin.py:190} INFO - [2025-02-23T15:21:14.578-0500] {dagbag.py:588} INFO - Filling up the DagBag from /home/binchen4568/Arlington-Property-Sales/airflow/dags/dag.py
+[2025-02-23T15:21:14.597-0500] {processor.py:925} INFO - DAG(s) 'Arlington_Property_Sales_Pipeline' retrieved from /home/binchen4568/Arlington-Property-Sales/airflow/dags/dag.py
+[2025-02-23T15:21:14.632-0500] {logging_mixin.py:190} INFO - [2025-02-23T15:21:14.632-0500] {dag.py:3239} INFO - Sync 1 DAGs
+[2025-02-23T15:21:14.652-0500] {logging_mixin.py:190} INFO - [2025-02-23T15:21:14.652-0500] {dag.py:4180} INFO - Setting next_dagrun for Arlington_Property_Sales_Pipeline to 2025-02-23 00:00:00+00:00, run_after=2025-03-02 00:00:00+00:00
+[2025-02-23T15:21:14.677-0500] {processor.py:208} INFO - Processing /home/binchen4568/Arlington-Property-Sales/airflow/dags/dag.py took 0.121 seconds
+[2025-02-23T15:21:45.710-0500] {processor.py:186} INFO - Started process (PID=66331) to work on /home/binchen4568/Arlington-Property-Sales/airflow/dags/dag.py
+[2025-02-23T15:21:45.711-0500] {processor.py:914} INFO - Processing file /home/binchen4568/Arlington-Property-Sales/airflow/dags/dag.py for tasks to queue
+[2025-02-23T15:21:45.713-0500] {logging_mixin.py:190} INFO - [2025-02-23T15:21:45.713-0500] {dagbag.py:588} INFO - Filling up the DagBag from /home/binchen4568/Arlington-Property-Sales/airflow/dags/dag.py
+[2025-02-23T15:21:45.726-0500] {processor.py:925} INFO - DAG(s) 'Arlington_Property_Sales_Pipeline' retrieved from /home/binchen4568/Arlington-Property-Sales/airflow/dags/dag.py
+[2025-02-23T15:21:45.766-0500] {logging_mixin.py:190} INFO - [2025-02-23T15:21:45.766-0500] {dag.py:3239} INFO - Sync 1 DAGs
+[2025-02-23T15:21:45.827-0500] {logging_mixin.py:190} INFO - [2025-02-23T15:21:45.827-0500] {dag.py:4180} INFO - Setting next_dagrun for Arlington_Property_Sales_Pipeline to 2025-02-23 00:00:00+00:00, run_after=2025-03-02 00:00:00+00:00
+[2025-02-23T15:21:45.870-0500] {processor.py:208} INFO - Processing /home/binchen4568/Arlington-Property-Sales/airflow/dags/dag.py took 0.166 seconds
+[2025-02-23T15:22:16.800-0500] {processor.py:186} INFO - Started process (PID=66361) to work on /home/binchen4568/Arlington-Property-Sales/airflow/dags/dag.py
+[2025-02-23T15:22:16.802-0500] {processor.py:914} INFO - Processing file /home/binchen4568/Arlington-Property-Sales/airflow/dags/dag.py for tasks to queue
+[2025-02-23T15:22:16.804-0500] {logging_mixin.py:190} INFO - [2025-02-23T15:22:16.803-0500] {dagbag.py:588} INFO - Filling up the DagBag from /home/binchen4568/Arlington-Property-Sales/airflow/dags/dag.py
+[2025-02-23T15:22:16.816-0500] {processor.py:925} INFO - DAG(s) 'Arlington_Property_Sales_Pipeline' retrieved from /home/binchen4568/Arlington-Property-Sales/airflow/dags/dag.py
+[2025-02-23T15:22:16.846-0500] {logging_mixin.py:190} INFO - [2025-02-23T15:22:16.846-0500] {dag.py:3239} INFO - Sync 1 DAGs
+[2025-02-23T15:22:16.864-0500] {logging_mixin.py:190} INFO - [2025-02-23T15:22:16.864-0500] {dag.py:4180} INFO - Setting next_dagrun for Arlington_Property_Sales_Pipeline to 2025-02-23 00:00:00+00:00, run_after=2025-03-02 00:00:00+00:00
+[2025-02-23T15:22:16.897-0500] {processor.py:208} INFO - Processing /home/binchen4568/Arlington-Property-Sales/airflow/dags/dag.py took 0.102 seconds
