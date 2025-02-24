@@ -9,11 +9,11 @@ import io
 from s3_storage import S3_upload, get_multiple_files
 from api_ingestion import get_sales_history, get_dwellings_general, get_dwellings_interior, get_property_class, get_outbuildings, get_property
 from transformation import transform_sales, transform_property_class, transform_sale_date, transform_dwellings_general, transform_dwellings_interior, transform_outbuildings, transform_property
-from postgres import create_tables, insert_data, truncate_tables
+from postgres import insert_data, truncate_tables
 
 
 config = configparser.ConfigParser()
-config.read('src/config.cfg')
+config.read('config.cfg')
 
 # this would call each api and collect the data into a dictionary
 async def collect_dataset():
@@ -66,7 +66,6 @@ async def main():
     transformed_datasets = collect_transform_dataset(working_files)
 
     truncate_tables() # remove the volumns during each load
-    create_tables()
 
     # insert the transformed data into the destination tables
     for dataset in transformed_datasets:

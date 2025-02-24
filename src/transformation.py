@@ -16,7 +16,7 @@ import io
 from logger import setup_logger
 
 # Set up our logger
-logger = setup_logger('transform_log', 'logs/transformation.log')
+logger = setup_logger('transform_log', 'elt_logs/transformation.log')
 
 def transform_sale_date():
     sale_date = pd.read_csv('data/sale_date.csv', header=0)

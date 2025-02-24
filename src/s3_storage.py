@@ -5,7 +5,7 @@ import io
 import sys
 import os
 
-sys.path.append("/home/binchen4568/Arlington-Property-Sales/src")
+sys.path.append("/opt/airflow/src")
 config = configparser.ConfigParser()
 config.read('config.cfg')
 s3_resource = boto3.resource('s3',

@@ -12,7 +12,7 @@ from logger import setup_logger
 
 config = configparser.ConfigParser()
 config.read('src/config.cfg') 
-logger = setup_logger('api_log','logs/api.log')
+logger = setup_logger('api_log','elt_logs/api.log')
 
 async def fetch_api_data(session, url): # helper function to start the async request
     try:
