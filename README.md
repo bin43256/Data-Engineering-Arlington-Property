@@ -1,6 +1,6 @@
-# Project Title: Arlington Property Sales Data Engineering
+# Arlington Property Sales Data Engineering
 ## Overview
-This project collects the Arlington County's real estate data and build a data pipeline that extract, transform, and load data into data warehouse for property sales analysis since 1980s. Read more about the project________
+This project collects the Arlington County's real estate data and build a data pipeline that extract, transform, and load data into data warehouse for property sales analysis since 1980s. Read more about the project on [my blog](https://medium.com/@binchen4568/building-an-end-to-end-data-pipeline-for-arlington-property-sales-16d8b79ec379)
 ## Architecture
 ![alt text](assets/architecture.png)
 ## Project Structure
