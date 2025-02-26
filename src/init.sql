@@ -46,14 +46,6 @@ CREATE TABLE IF NOT EXISTS dim_property_class (
     propertyClassTypeDsc VARCHAR(255)
 );
 
-CREATE TABLE IF NOT EXISTS dim_outbuildings (
-    outbuildingKey INT PRIMARY KEY,
-    outbuildingBaseKey INT,
-    realEstatePropertyCode INT,
-    outbuildingTypeDsc VARCHAR(255),
-    outbuildingSquareFeetQty INT
-);
-
 CREATE TABLE IF NOT EXISTS dim_property (
     propertyKey INT PRIMARY KEY,
     realEstatePropertyCode INT,

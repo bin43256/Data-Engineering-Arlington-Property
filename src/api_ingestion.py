@@ -77,13 +77,10 @@ async def get_dwellings_general():
     url = (f"{config.get('APIS', 'DWELLINGS_GENERAL')}?$select="
            "dwellingKey,"
            "realEstatePropertyCode,"
-           "basementFinishedRecRoomSquareFeetQty,"
-           "basementRecRoomTypeDsc,"
            "coolingTypeDsc,"
            "dwellingTypeDsc,"
            "heatingTypeDsc,"
            "dwellingYearBuiltDate,"
-           "extraFixtureCnt,"
            "storiesQuantityDsc,"
            "fireplaceCnt")
     return await get_api_data(url)
@@ -108,16 +105,6 @@ async def get_property_class():
            "propertyClassTypeKey,"
            "propertyClassTypeCode,"
            "propertyClassTypeDsc")
-    return await get_api_data(url)
-
-async def get_outbuildings():
-    url = (f"{config.get('APIS', 'OUTBUILDINGS')}?$select="
-           "outbuildingKey,"
-           "realEstatePropertyCode,"
-           "outbuildingBaseKey,"
-           "outbuildingTypeCode,"
-           "outbuildingTypeDsc,"
-           "outbuildingSquareFeetQty")
     return await get_api_data(url)
 
 async def get_property():

@@ -1,4 +1,6 @@
 import psycopg2
+import adbc_driver_postgresql.dbapi as pg_dbapi
+import pandas as pd
 
 default_db = {
     'host': 'postgres_database',
@@ -7,28 +9,19 @@ default_db = {
     'user': 'postgres',
     'password': 'secret'
 }
+conn_string = 'postgres://postgres:postgres@localhost:5432/postgres'
 
-def insert_data(table_name: str, json_data: list) -> None:
+def insert_data(table_name: str, data: pd.DataFrame) -> None:
     """
-    Inserts JSON data into the target PostgreSQL table.
+    Inserts dataframe object into the target PostgreSQL table.
     """
     print(f'Inserting into table {table_name}')
     try:
-        with psycopg2.connect(**default_db) as conn:
-            with conn.cursor() as cur:
-                columns = json_data[0].keys()
-                values_template = ','.join(['%s'] * len(columns))
-                insert_query = f"INSERT INTO {table_name} ({','.join(columns)}) VALUES ({values_template})"
-                values = [[record[column] for column in columns] for record in json_data]                
-                batch_size = 1000
-                for i in range(0, len(values), batch_size):
-                    batch = values[i:i + batch_size]
-                    cur.executemany(insert_query, batch)
-                    print(f"Inserted batch of {len(batch)} records")
-                print(f'Data inserted into {table_name} successfully!')       
+        with pg_dbapi.connect(conn_string) as conn:
+            data.to_sql(table_name, conn, if_exists='replace', index=False)
+            print(f'Data inserted into {table_name} successfully!')
     except Exception as e:
         print(f'An error occurred while inserting data: {str(e)}')
-        raise
 
 def truncate_tables():
     try:

@@ -23,7 +23,7 @@ def transform_sale_date():
     sale_date['saleDateKey'] = sale_date['saleDateKey'].str.replace(',', '').astype(int)
     sale_date['saleDate'] = pd.to_datetime(sale_date['saleDate'])
     logger.debug(f'SALE DATE columns with data types: {sale_date.dtypes}')
-    return sale_date, sale_date.to_dict('records')
+    return sale_date
 
 def transform_dwellings_general(data: io.BytesIO):
     # Convert BytesIO to JSON
@@ -31,34 +31,25 @@ def transform_dwellings_general(data: io.BytesIO):
     df = pd.DataFrame(data=json_data)
     df.dropna(axis=1, how='all', inplace=True)
     drop_duplicate_df = df.drop_duplicates(subset=['dwellingKey'], keep=False)
-    
-    # Convert column data types to integer
     drop_duplicate_df['realEstatePropertyCode'] = drop_duplicate_df['realEstatePropertyCode'].astype(int)
 
-    dwellings_general_df = drop_duplicate_df[[
-        "dwellingKey", "realEstatePropertyCode","coolingTypeDsc", "dwellingTypeDsc", "heatingTypeDsc", 
-        "dwellingYearBuiltDate", "storiesQuantityDsc", "fireplaceCnt"
-    ]]
-
-    logger.debug(f'DWELLINGS GENERAL columns with data types: {dwellings_general_df.dtypes}')
+    logger.debug(f'DWELLINGS GENERAL columns with data types: {drop_duplicate_df.dtypes}')
+    logger.debug(f'Dwellings General DataFrame Info: {drop_duplicate_df.info()}')
+    logger.debug(f'Dwellings General DataFrame Describe: {drop_duplicate_df.describe()}')
     # Convert DataFrame to JSON records
-    return dwellings_general_df.to_dict('records')
+    return drop_duplicate_df
 
 def transform_dwellings_interior(data: io.BytesIO):
     json_data = json.loads(data.read().decode('utf-8'))
     df = pd.DataFrame(data=json_data)
-    df_select = df[[
-        "improvementInteriorKey", "realEstatePropertyCode", "baseAreaSquareFeetQty", "bedroomCnt",
-        "finishedAreaSquareFeetQty", "twoFixtureBathroomCnt", "threeFixtureBathroomCnt", "fourFixtureBathroomCnt",
-        "fiveFixtureBathroomCnt", "floorNbr", "floorKey"
-    ]]
-    filled_df = df_select.fillna('Not Applicable')
-
+    filled_df = df.fillna('Not Applicable')
     dwellings_interior_df = filled_df.drop_duplicates(subset=["improvementInteriorKey"])
     dwellings_interior_df['realEstatePropertyCode'] = dwellings_interior_df['realEstatePropertyCode'].astype(int)
 
+    logger.debug(f'Dwellings Interior DataFrame Info: {filled_df.info()}')
+    logger.debug(f'Dwellings Interior DataFrame Describe: {filled_df.describe()}')
     logger.debug(f'DWELLINGS INTERIOR columns with data types: {dwellings_interior_df.dtypes}')
-    return dwellings_interior_df.to_dict('records')
+    return dwellings_interior_df
 
 def transform_property_class(data: io.BytesIO):
     json_data = json.loads(data.read().decode('utf-8'))
@@ -66,36 +57,21 @@ def transform_property_class(data: io.BytesIO):
     property_class_df['propertyClassTypeKey'] = property_class_df.reset_index().index + 1  # Simulating row number
     logger.debug(f'PROPERTY CLASS columns with data types: {property_class_df.dtypes}')
 
-    return property_class_df, property_class_df.to_dict('records')
-
-def transform_outbuildings(data: io.BytesIO):
-    json_data = json.loads(data.read().decode('utf-8'))
-    df = pd.DataFrame(data=json_data)
-    df.dropna(axis=1, how='all', inplace=True)
-
-    df['realEstatePropertyCode'] = df['realEstatePropertyCode'].astype(int)
-
-    outbuilding_df = df[[
-        "outbuildingKey", "outbuildingBaseKey", "realEstatePropertyCode", "outbuildingTypeDsc", "outbuildingSquareFeetQty"
-    ]]
-    logger.debug(f'OUTBUILDINGS columns with data types: {outbuilding_df.dtypes}')
-    return outbuilding_df.to_dict('records')
+    return property_class_df
 
 def transform_property(data: io.BytesIO, property_class: io.BytesIO):
     json_data = json.loads(data.read().decode('utf-8'))
     df = pd.DataFrame(data=json_data)
-    df.drop_duplicates(inplace=True)
+    df.drop_duplicates(subset=["propertyKey"], inplace=True)
     df['realEstatePropertyCode'] = df['realEstatePropertyCode'].astype(int)
 
-    property_df = df[[
-        "propertyKey", "realEstatePropertyCode","propertyClassTypeCode",
-        "legalDsc", "lotSizeQty","propertyStreetNbrNameText", "propertyUnitNbr",
-        "propertyCityName", "propertyZipCode"
-    ]]
-    property_df = property_df.merge(property_class, on="propertyClassTypeCode", how="left")
+    property_df = df.merge(property_class, on="propertyClassTypeCode", how="left")
     property_df.drop(columns=["propertyClassTypeCode","propertyClassTypeDsc"], inplace=True)
+
+    logger.debug(f'PROPERTY DataFrame Info: {property_df.info()}')
+    logger.debug(f'PROPERTY DataFrame Describe: {property_df.describe()}')
     logger.debug(f'PROPERTY columns with data types: {property_df.dtypes}')
-    return property_df.to_dict('records')
+    return property_df
 
 def transform_sales(data: io.BytesIO, sale_date_df):
     json_data = json.loads(data.read().decode('utf-8'))
@@ -111,15 +87,17 @@ def transform_sales(data: io.BytesIO, sale_date_df):
     sales_type_df = df[["salesTypeCode", "salesTypeDsc"]].drop_duplicates()
     sales_type_df['salesTypeKey'] = sales_type_df.reset_index().index + 1  # Simulating monotonically increasing ID
 
-    df = df.merge(sales_type_df[['salesTypeCode', 'salesTypeKey']], on="salesTypeCode", how="left")
+    df = df.merge(sales_type_df, on="salesTypeCode", how="left")
+    
     df['saleDate'] =df['saleDate'].dt.tz_localize(None)
-    # Normalize both columns to remove the time part
     df['saleDate'] = pd.to_datetime(df['saleDate']).dt.normalize()
     sale_date_df['saleDate'] = pd.to_datetime(sale_date_df['saleDate']).dt.normalize()
     df = df.merge(sale_date_df,on = 'saleDate', how = 'left')
     sales_df = df[[
         "salesHistoryKey", "realEstatePropertyCode", "propertyKey", "salesTypeKey", "saleDateKey", "saleAmt"
     ]]
-    
-    print(f'\nSALES columns with data types: {sales_df.dtypes}')
-    return sales_df.to_dict('records'), sales_type_df.to_dict('records')
+
+    logger.debug(f'SALES DataFrame Info: {sales_df.info()}')
+    logger.debug(f'SALES DataFrame Describe: {sales_df.describe()}')
+    logger.debug(f'SALES columns with data types: {sales_df.dtypes}')
+    return sales_df, sales_type_df

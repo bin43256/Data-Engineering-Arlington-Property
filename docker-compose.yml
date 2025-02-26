@@ -27,7 +27,7 @@ services:
       - "5432:5432"
 
   init-airflow:
-    image: apache/airflow:2.7.0
+    image: apache/airflow:latest
     depends_on:
       - postgres
     networks:

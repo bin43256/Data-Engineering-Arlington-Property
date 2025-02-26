@@ -65,7 +65,7 @@ with DAG(
         task_id='dbt_run',
         image='ghcr.io/dbt-labs/dbt-postgres:1.4.7',
         command='cd /dbt && dbt run --models staging full_denormed_table',
-        auto_remove=True,
+        auto_remove="success",
         docker_url="unix://var/run/docker.sock",
         network_mode="elt_network",
         mounts=[
@@ -88,7 +88,7 @@ with DAG(
                 exit 1
             fi
         ''',
-        auto_remove=True,
+        auto_remove="success",
         docker_url="unix://var/run/docker.sock",
         network_mode="elt_network",
         mounts=[
