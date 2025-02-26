@@ -10,13 +10,14 @@ Arlington-Property-Sales/
 │ ├── dags/
 │ │ ├── dag.py # Main DAG file for orchestration
 │ └── airflow.cfg # Airflow configuration file
-├── data/
-│ └── full_denormed_table.csv #final output
 ├── dbt_transformation/ # DBT models and tests
 ├── elt_logs/ # metadata produce during etl
 │ ├── api.log
 │ └── transformation.log
 └── src/
+├── elt_logs/ # metadata produce during etl
+│ ├── api.log
+│ └── transformation.log
 ├── api_ingestion.py 
 ├── main.py
 ├── postgres.py
