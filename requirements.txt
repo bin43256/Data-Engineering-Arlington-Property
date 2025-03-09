@@ -1,0 +1,9 @@
+psycopg2-binary
+pandas>2.2.0
+boto3
+aiohttp
+requests
+configparser
+adbc-driver-postgresql
+pyarrow
+dbt-postgres==1.4.7

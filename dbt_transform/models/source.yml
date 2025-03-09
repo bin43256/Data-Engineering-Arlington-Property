@@ -1,0 +1,20 @@
+version: 2
+sources:
+  - name: postgres
+    database: postgres
+    description: A replica of the postgres database 
+    schema: public
+    tables:
+      - name: dim_dwellings_interior
+        description: contain interior features
+      - name: dim_property
+        description: a list fo existing properties
+      - name: dim_property_class
+        description: a list of types of property
+      - name: dim_sale_date
+        description: calender date
+      - name: dim_sales_type
+        description: for catogries of sales
+      - name: fact_sales
+        description: for each transaction of property sales
+

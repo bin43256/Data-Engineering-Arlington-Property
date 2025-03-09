@@ -1,0 +1,16 @@
+version: 2
+
+models:
+  - name: fact_sales
+    description: "Test the sales data"
+    columns:
+      - name: '"salesHistoryKey"'
+        description: "Primary key from fact_sales"
+        tests:
+          - unique
+          - not_null
+      - name: '"saleAmt"'
+        description: "Amount of the sale"
+        tests:
+          - saleAmount
+

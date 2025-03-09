@@ -1,0 +1,1 @@
+SELECT * FROM {{ source('postgres', 'dim_sale_date')}}
