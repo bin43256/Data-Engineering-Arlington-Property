@@ -15,7 +15,7 @@ This project collects the Arlington County's [real estate data](https://data.arl
 ## Prerequiste
     - install docker 
     - Create an AWS account and create IAM User with access to S3
-
+ 
 ## Project Structure
 ```text
 ├── Dockerfile
