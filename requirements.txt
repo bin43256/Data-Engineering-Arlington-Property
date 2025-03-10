@@ -7,3 +7,4 @@ configparser
 adbc-driver-postgresql
 pyarrow
 dbt-postgres==1.4.7
+duckdb
