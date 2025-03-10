@@ -4,4 +4,6 @@ src/test.py
 src/config.cfg
 .cursor
 .vscode
-
+airflow/dags/__pycache__/
+datawarehouse.duckdb
+src/__pycache__/
