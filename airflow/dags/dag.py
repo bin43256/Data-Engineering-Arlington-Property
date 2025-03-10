@@ -44,7 +44,7 @@ with DAG(
     )
 
     duckdb_migration = BashOperator(
-        task_id='migrate data to duckdb',
+        task_id='migrate_to_duckdb',
         bash_command=f'cd {PROJECT_PATH} && python3 duckdb_migrate.py',
     )
 
